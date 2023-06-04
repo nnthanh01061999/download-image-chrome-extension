@@ -1,5 +1,3 @@
-import { Image } from '../types';
-
 export const checkImage = (src: string, domain: string, url: string = '') => {
     if (src.includes('base64')) return src;
     if (src.includes('http://') || src.includes('https://')) {
@@ -15,7 +13,7 @@ export const checkImage = (src: string, domain: string, url: string = '') => {
     return '';
 };
 
-const getFileName = (url: string) => {
+export const getFileName = (url: string) => {
     if (url.includes('data:image')) return 'image.svg';
     const fileName = url?.split('/')?.pop()?.split('#')[0]?.split('?')[0];
     return !fileName
@@ -25,62 +23,6 @@ const getFileName = (url: string) => {
           )
         ? fileName
         : fileName + '.png';
-};
-
-export const handleDownLoadImage = (
-    item: Image,
-    callback: (src: string) => void
-) => {
-    return () => {
-        fetch(item.src, {
-            method: 'GET',
-            headers: {},
-        })
-            .then((response) => {
-                response.arrayBuffer().then(function (buffer) {
-                    const url = window.URL.createObjectURL(new Blob([buffer]));
-                    const link = document.createElement('a');
-                    let fileName = getFileName(item.src);
-                    link.href = url;
-                    link.setAttribute('download', fileName);
-                    document.body.appendChild(link);
-                    link.click();
-                });
-            })
-            .catch(() => {
-                callback(item.src);
-            });
-    };
-};
-
-export const handleDownloadAllImage = (
-    data: string[],
-    callback: (item: string) => void
-) => {
-    return () => {
-        data?.forEach((item) => {
-            fetch(item, {
-                method: 'GET',
-                headers: {},
-            })
-                .then((response) => {
-                    response.arrayBuffer().then(function (buffer) {
-                        const url = window.URL.createObjectURL(
-                            new Blob([buffer])
-                        );
-                        let fileName = getFileName(item);
-                        const link = document.createElement('a');
-                        link.href = url;
-                        link.setAttribute('download', fileName);
-                        document.body.appendChild(link);
-                        link.click();
-                    });
-                })
-                .catch(() => {
-                    callback(item);
-                });
-        });
-    };
 };
 
 export const extractHostname = (url: string) => {

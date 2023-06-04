@@ -1,3 +1,9 @@
+:root {
+    --green: #34d399;
+    --black: #000000;
+    --white: #ffffff;
+    --lig-red: #f87171;
+}
 .App {
     width: 632px;
     height: 584px;
@@ -8,7 +14,7 @@
     justify-content: space-between;
     flex-wrap: nowrap;
     align-items: center;
-    padding: 1rem;
+    padding: 0.5rem 1rem 1rem;
 }
 
 .information {
@@ -25,13 +31,14 @@
 
 .information__label {
     font-size: 14px;
-    color: #34d399;
+    color: var(--black);
     margin: 0;
 }
 
 .information__value {
     font-weight: bold;
     margin: 0 0 0 0.25rem;
+    color: var(--green);
 }
 
 .action {
@@ -44,14 +51,14 @@
     display: inline-block;
     margin-left: 0.5rem;
     width: auto;
-    background-color: #34d399;
+    background-color: var(--green);
     cursor: pointer;
     color: #fff;
     font-size: 0.875rem;
     font-weight: 600;
     padding: 0.25rem 1rem;
-    border-radius: 0.25rem;
-    border: 1px solid black;
+    border-radius: 1rem;
+    border-color: transparent;
 }
 
 .btn:hover {
@@ -60,7 +67,6 @@
 
 .btn:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.5);
 }
 
 .btn:disabled {
@@ -72,7 +78,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     grid-gap: 0.5rem;
-    height: 31.2rem;
+    height: 30rem;
     overflow: auto;
 }
 
@@ -87,7 +93,7 @@
 }
 
 .image-wrapper::-webkit-scrollbar-thumb {
-    background-color: #34d399;
+    background-color: var(--green);
 }
 
 .image-card {
@@ -101,7 +107,7 @@
 }
 
 .image-card.selected {
-    border: 2px solid #34d399;
+    border: 2px solid var(--green);
 }
 
 .image-container {
@@ -122,6 +128,15 @@
     opacity: 0.5;
 }
 
+.image-container__image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    border: 1px solid var(--green);
+    border-bottom: none;
+}
+
 .image {
     max-width: 100%;
     max-height: 100%;
@@ -132,8 +147,8 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    border: 1px solid #34d399;
-    padding: 0.25rem;
+    border: 1px solid var(--green);
+    padding: 0.5rem;
 }
 
 .action-icon {
@@ -157,7 +172,7 @@
 .check-icon {
     width: 32px;
     height: 32px;
-    background-color: #34d399;
+    background-color: var(--green);
     backdrop-filter: blur(10px);
     border-radius: 0 0 8px 0;
     display: flex;
@@ -170,11 +185,89 @@
     position: absolute;
     width: 100%;
     height: 40px;
-    background-color: #f87171;
+    background-color: var(--lig-red);
     left: 0;
     top: 33.333333%;
     color: white;
     padding: 8px;
     border: 1px solid #a5b4c2;
     text-align: center;
+}
+
+.tab {
+    width: 100%;
+    height: 1.5rem;
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 0.5rem;
+}
+.tab input {
+    display: none;
+}
+.tab > input:checked + label {
+    color: var(--white);
+}
+.tab__1,
+.tab__2,
+.tab__3 {
+    width: 5rem;
+    height: 1.5rem;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: var(--black);
+    transition: all 0.5s ease;
+}
+.tab__1:hover,
+.tab__2:hover,
+.tab__3:hover {
+    color: var(--green);
+}
+.tab__color {
+    position: absolute;
+    height: 1.8rem;
+    width: 5rem;
+    border-radius: 1rem;
+    pointer-events: none;
+    background-color: var(--green);
+    top: 7px;
+    z-index: -1;
+}
+#tab-1:checked ~ .tab__color {
+    transform: translateX(0);
+    transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+#tab-2:checked ~ .tab__color {
+    transform: translateX(5rem);
+    transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.video-table {
+    border-collapse: collapse;
+    width: 100%;
+    height: fit-content;
+}
+
+.video-table-head {
+    border: 1px solid var(--black);
+    text-align: center;
+    padding: 8px;
+    color: var(--green);
+}
+
+.video-table-row {
+    border: 1px solid var(--black);
+    text-align: left;
+    padding: 8px;
+}
+
+.empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
 }

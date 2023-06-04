@@ -2,34 +2,40 @@ import React from 'react';
 import './App.css';
 import ImageCard from './components/ImageCard';
 import Information from './components/Information';
-import { DOMMessage, DOMMessageResponse, Image } from './types';
-import { checkImage, handleDownloadAllImage } from './utils';
+import Tab from './components/Tab';
+import Show from './components/condition/Show';
+import { DOMMessage, DOMMessageResponse, Image, Video } from './types';
+import { checkImage, downloadAllImage } from './utils';
+import Empty from './components/Empty';
 
 function App() {
-    const [data, setData] = React.useState<Image[]>([]);
-    const [selected, setSelected] = React.useState<string[]>([]);
+    const [tab, setTab] = React.useState<string>('image');
+
+    const [images, setImages] = React.useState<Image[]>([]);
+    const [videos, setVideos] = React.useState<Video[]>([]);
+    const [selectedImage, setselectedImage] = React.useState<string[]>([]);
 
     const onSelect = (item: string) => {
-        selected.includes(item)
-            ? setSelected([...selected.filter((itm) => itm !== item)])
-            : setSelected([...selected, item]);
+        selectedImage.includes(item)
+            ? setselectedImage([...selectedImage.filter((itm) => itm !== item)])
+            : setselectedImage([...selectedImage, item]);
     };
 
     const onDownloadError = (src: string) => {
-        setData((prevData) =>
-            prevData.map((item) =>
+        setImages((prevImage) =>
+            prevImage.map((item) =>
                 item.src === src
-                    ? { ...item, error: 'Error download image!' }
+                    ? { ...item, error: 'Error download images!' }
                     : item
             )
         );
     };
 
     const handleSelectAllImage = () => {
-        if (selected.length === data.length) {
-            setSelected([]);
+        if (selectedImage.length === images.length) {
+            setselectedImage([]);
         } else {
-            setSelected([...data.map((item) => item.src)]);
+            setselectedImage([...images.map((item) => item.src)]);
         }
     };
 
@@ -67,7 +73,9 @@ function App() {
                                     imgs.map((item) => [item['src'], item])
                                 ).values() as any) || []),
                             ];
-                            setData(imgs);
+                            setImages(imgs);
+
+                            setVideos(response.videos);
                         }
                     );
                 }
@@ -76,42 +84,71 @@ function App() {
 
     return (
         <div className='App'>
-            <div className='container'>
-                <Information
-                    total={data.length}
-                    totalSelected={selected.length}
-                />
-                <div className='action'>
-                    <button
-                        disabled={data.length === 0}
-                        className='btn'
-                        onClick={handleSelectAllImage}
-                    >
-                        Select All
-                    </button>
-                    <button
-                        disabled={selected.length === 0}
-                        className='btn'
-                        onClick={handleDownloadAllImage(
-                            selected,
-                            onDownloadError
-                        )}
-                    >
-                        Download All Selected
-                    </button>
-                </div>
-            </div>
-            <div className='image-wrapper'>
-                {data?.map((item, index) => (
-                    <ImageCard
-                        key={index}
-                        data={item}
-                        selected={selected?.includes(item.src)}
-                        onSelect={() => onSelect(item.src)}
-                        onDownloadError={onDownloadError}
+            <Tab value={tab} onChange={(value) => setTab(value)} />
+            <Show when={tab === 'image'}>
+                <div className='container'>
+                    <Information
+                        total={images.length}
+                        totalSelected={selectedImage.length}
                     />
-                ))}
-            </div>
+                    <div className='action'>
+                        <button
+                            disabled={images.length === 0}
+                            className='btn'
+                            onClick={handleSelectAllImage}
+                        >
+                            Select All
+                        </button>
+                        <button
+                            disabled={selectedImage.length === 0}
+                            className='btn'
+                            onClick={downloadAllImage(
+                                selectedImage,
+                                onDownloadError
+                            )}
+                        >
+                            Download All Selected
+                        </button>
+                    </div>
+                </div>
+                <div className='image-wrapper'>
+                    {images.length > 0 ? (
+                        images?.map((item, index) => (
+                            <ImageCard
+                                key={index}
+                                data={item}
+                                selected={selectedImage?.includes(item.src)}
+                                onSelect={() => onSelect(item.src)}
+                                onDownloadError={onDownloadError}
+                            />
+                        ))
+                    ) : (
+                        <Empty />
+                    )}
+                </div>
+            </Show>
+            <Show when={tab === 'video'}>
+                <div className='image-wrapper'>
+                    {videos?.length ? (
+                        <table className='video-table'>
+                            <tr>
+                                <th className='video-table-head'>
+                                    Video link:
+                                </th>
+                            </tr>
+                            {videos.map((video, index) => (
+                                <tr key={index}>
+                                    <td className='video-table-row'>
+                                        <a href={video.src}>{video?.src}</a>
+                                    </td>
+                                </tr>
+                            ))}
+                        </table>
+                    ) : (
+                        <Empty />
+                    )}
+                </div>
+            </Show>
         </div>
     );
 }

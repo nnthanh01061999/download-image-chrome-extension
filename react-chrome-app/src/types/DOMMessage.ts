@@ -1,4 +1,4 @@
-import { Image } from './';
+import { Video, Image } from './';
 
 export type DOMMessage = {
     type: 'GET_DOM';
@@ -6,4 +6,5 @@ export type DOMMessage = {
 
 export type DOMMessageResponse = {
     images: Image[];
+    videos: Video[];
 };

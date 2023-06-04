@@ -1,4 +1,4 @@
-import { handleDownLoadImage } from '../utils';
+import { downLoadImage } from '../utils';
 import BlankIcon from '../images/svg/BlankIcon';
 import CheckIcon from '../images/svg/CheckIcon';
 import DownloadIcon from '../images/svg/DownloadIcon';
@@ -43,7 +43,7 @@ function ImageCard(props: Props) {
                 <div className='actions-container'>
                     <span
                         className='action-icon'
-                        onClick={handleDownLoadImage(data, onDownloadError)}
+                        onClick={downLoadImage(data, onDownloadError)}
                     >
                         <DownloadIcon />
                     </span>
